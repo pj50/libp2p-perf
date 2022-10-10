@@ -46,13 +46,15 @@ pub fn build_transport(
     quic_addr: Option<Multiaddr>,
 ) -> std::io::Result<core::transport::Boxed<(PeerId, StreamMuxerBox)>> {
     // v3
-    let mut quic_transport =
-        quic::GenTransport::<quic::async_std::Provider>::new(quic::Config::new(&keypair).unwrap());
+    // let mut quic_transport =
+    //     quic::GenTransport::<quic::async_std::Provider>::new(quic::Config::new(&keypair).unwrap());
+
+    // v4
+    let mut quic_transport = quic::QuicTransport::new(quic::Config::new(&keypair).unwrap());
+
     quic_transport
         .listen_on(quic_addr.unwrap_or("/ip4/0.0.0.0/udp/0/quic".parse().unwrap()))
         .unwrap();
-
-    // v4
 
     Ok(Transport::map(quic_transport, |(peer, muxer), _| {
         (peer, StreamMuxerBox::new(muxer))

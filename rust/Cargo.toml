@@ -7,7 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-libp2p = { version = "0.49.0", path = "../../crates/rust-libp2p-kpp/", default-features = false, features = ["quic-async-std", "noise", "plaintext", "rsa", "yamux"] }
+libp2p = { version = "0.49.0", path = "../../crates/rust-libp2p-kpp/", default-features = false, features = ["quic", "noise", "plaintext", "rsa", "yamux"] }
 futures_codec = "0.4"
 futures = "0.3.1"
 async-std = { version = "1.6.2", features = ["attributes"] }
