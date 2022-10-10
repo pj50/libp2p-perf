@@ -1,0 +1,28 @@
+diff --git a/transports/quic/src/lib.rs b/transports/quic/src/lib.rs
+index 4f976af1..45add76b 100644
+--- a/transports/quic/src/lib.rs
++++ b/transports/quic/src/lib.rs
+@@ -207,7 +207,7 @@ impl Config {
+         let mut transport = quinn::TransportConfig::default();
+         transport.max_concurrent_uni_streams(0u32.into()); // Can only panic if value is out of range.
+         transport.datagram_receive_buffer_size(None);
+-        transport.keep_alive_interval(Some(Duration::from_millis(10)));
++        transport.keep_alive_interval(Some(Duration::from_secs(1)));
+         let transport = Arc::new(transport);
+ 
+         let client_tls_config = tls::make_client_config(keypair).unwrap();
+diff --git a/transports/quic/src/tls/mod.rs b/transports/quic/src/tls/mod.rs
+index 27614ebe..fee2629d 100644
+--- a/transports/quic/src/tls/mod.rs
++++ b/transports/quic/src/tls/mod.rs
+@@ -39,8 +39,8 @@ use rustls::{
+ static TLS13_CIPHERSUITES: &[SupportedCipherSuite] = &[
+     // TLS1.3 suites
+     TLS13_AES_256_GCM_SHA384,
+-    TLS13_AES_128_GCM_SHA256,
+-    TLS13_CHACHA20_POLY1305_SHA256,
++    //TLS13_AES_128_GCM_SHA256,
++    //TLS13_CHACHA20_POLY1305_SHA256,
+ ];
+ 
+ const P2P_ALPN: [u8; 6] = *b"libp2p";
