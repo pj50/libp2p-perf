@@ -1,7 +1,7 @@
 use futures::prelude::*;
 use libp2p::swarm::{SwarmBuilder, SwarmEvent};
 use libp2p::{identity, Multiaddr, PeerId};
-use libp2p_perf::{build_transport, Perf, TransportSecurity};
+use libp2p_perf::{build_transport, Perf};
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
@@ -12,9 +12,6 @@ use structopt::StructOpt;
 struct Opt {
     #[structopt(long)]
     server_address: Multiaddr,
-
-    #[structopt(long)]
-    transport_security: Option<TransportSecurity>,
 }
 
 #[async_std::main]
@@ -25,12 +22,7 @@ async fn main() {
     let key = identity::Keypair::generate_ed25519();
     let local_peer_id = PeerId::from(key.public());
 
-    let transport = build_transport(
-        false,
-        key,
-        opt.transport_security.unwrap_or(TransportSecurity::Noise),
-    )
-    .unwrap();
+    let transport = build_transport(key, None).unwrap();
     let perf = Perf::default();
     let mut client = SwarmBuilder::new(transport, perf, local_peer_id)
         .executor(Box::new(|f| {
@@ -55,7 +47,7 @@ async fn main() {
                 break;
             }
             SwarmEvent::ConnectionEstablished { .. } => {}
-            e => panic!("{:?}", e),
+            e => println!("{:?}", e),
         }
     }
 }
